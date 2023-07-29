@@ -132,58 +132,6 @@ for (var i = 0; i < jokeContainers.length; i++) {
         this.innerText = 'Hide Punchline'; // Change the button text to 'Hide Punchline'
     }
 });
-
-    // Add edit button for each joke
-    var editButton = document.createElement("button");
-    editButton.innerText = "Edit Joke";
-    editButton.className = "editButton";
-    joke.appendChild(editButton);
-
-    // Add save button for each joke
-    var saveButton = document.createElement("button");
-    saveButton.innerText = "Save Joke";
-    saveButton.className = "saveButton";
-    saveButton.style.display = 'none';
-    joke.appendChild(saveButton);
-}
-
-var editButtons = document.getElementsByClassName('editButton');
-for (var i = 0; i < editButtons.length; i++) {
-    editButtons[i].addEventListener('click', function() {
-        var jokeContainer = this.parentElement;
-        var jokeParagraph = jokeContainer.getElementsByTagName('p')[0];
-        var jokePunchline = jokeContainer.getElementsByClassName('punchline')[0];
-        jokeParagraph.contentEditable = true;
-        jokePunchline.contentEditable = true;
-        jokeContainer.getElementsByClassName('saveButton')[0].style.display = 'block'; // modified line
-    });
-}
-
-var saveButtons = document.getElementsByClassName('saveButton');
-for (var i = 0; i < saveButtons.length; i++) {
-    saveButtons[i].addEventListener('click', function() {
-        var jokeContainer = this.parentElement;
-        var jokeParagraph = jokeContainer.getElementsByTagName('p')[0];
-        var jokePunchline = jokeContainer.getElementsByClassName('punchline')[0];
-        jokeParagraph.contentEditable = false;
-        jokePunchline.contentEditable = false;
-        localStorage.setItem('joke' + i, JSON.stringify({
-            joke: jokeParagraph.innerText,
-            punchline: jokePunchline.innerText
-        }));
-        this.style.display = 'none';
-    });
-}
-
-// Load jokes from localStorage on page load
-window.onload = function() {
-    for (var i = 0; i < jokeContainers.length; i++) {
-        var savedJoke = JSON.parse(localStorage.getItem('joke' + i));
-        if (savedJoke) {
-            jokeContainers[i].getElementsByTagName('p')[0].innerText = savedJoke.joke;
-            jokeContainers[i].getElementsByClassName('punchline')[0].innerText = savedJoke.punchline;
-        }
-    }
 }
 </script>
 </body>
