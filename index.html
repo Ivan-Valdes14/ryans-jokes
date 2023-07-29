@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ryan's Jokes</title>
+     <style>
+       body {
+            /* Set a minimum height of 100% of the viewport height */
+            min-height: 100vh;
+            /* Apply the linear gradient */
+            background: linear-gradient(to bottom, black, red);
+            color: white;
+        }
+
+        #jokes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .joke {
+            border: 1px solid white; /* Changing the border color to white for better visibility */
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1); /* Adding a semi-transparent white background to the jokes for better readability */
+        }
+        .joke-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .punchline {
+            display: none;
+            margin-top: 10px;
+        }
+        #header {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 3px solid white; /* Changing the border color to white for better visibility */
+            box-shadow: 5px 5px 10px grey;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1); /* Adding a semi-transparent white background to the header for better readability */
+        }
+    </style>
+</head>
+<body>
+    <h1 id="header">Ryan's Jokes</h1>
+
+    <div id="jokes">
+        <div class="joke">
+            <p>Why don't scientists trust atoms?</p>
+            <div class="punchline">Because they make up everything!</div>
+            <button class="revealButton">Reveal Punchline</button>       
+        </div>
+        <div class="joke">
+            <p>Why couldn't the bicycle stand up by itself?</p>
+            <div class="punchline">It was two tired!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>Why did the scarecrow win an award?</p>
+            <div class="punchline">Because he was outstanding in his field!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>Why don't skeletons fight each other?</p>
+            <div class="punchline">They don't have the guts!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>Why couldn't the leopard play hide and seek?</p>
+            <div class="punchline">Because he was always spotted!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>What do you call a fake noodle?</p>
+            <div class="punchline">An impasta!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>Why did the golfer bring two pairs of pants?</p>
+            <div class="punchline">In case he got a hole in one!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>Why don't we ever tell secrets on a farm?</p>
+            <div class="punchline">Because the potatoes have eyes and the corn has ears!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+        <div class="joke">
+            <p>Why did the math book look sad?</p>
+            <div class="punchline">Because it had too many problems!</div>
+            <button class="revealButton">Reveal Punchline</button>
+        </div>
+    </div>
+
+<script>
+var jokeContainers = document.getElementsByClassName('joke');
+
+for (var i = 0; i < jokeContainers.length; i++) {
+    var joke = jokeContainers[i];
+    var revealButton = joke.getElementsByClassName('revealButton')[0];
+
+    // Reveal punchline when "Reveal Punchline" button is clicked
+    
+    revealButton.addEventListener('click', function() {
+    var punchline = this.previousElementSibling;
+    if(punchline.style.display === 'block') {
+        punchline.style.display = 'none'; // Hide the punchline if it is currently displayed
+        this.innerText = 'Reveal Punchline'; // Change the button text back to 'Reveal Punchline'
+    } else {
+        punchline.style.display = 'block'; // Show the punchline if it is currently hidden
+        this.innerText = 'Hide Punchline'; // Change the button text to 'Hide Punchline'
+    }
+});
+
+    // Add edit button for each joke
+    var editButton = document.createElement("button");
+    editButton.innerText = "Edit Joke";
+    editButton.className = "editButton";
+    joke.appendChild(editButton);
+
+    // Add save button for each joke
+    var saveButton = document.createElement("button");
+    saveButton.innerText = "Save Joke";
+    saveButton.className = "saveButton";
+    saveButton.style.display = 'none';
+    joke.appendChild(saveButton);
+}
+
+var editButtons = document.getElementsByClassName('editButton');
+for (var i = 0; i < editButtons.length; i++) {
+    editButtons[i].addEventListener('click', function() {
+        var jokeContainer = this.parentElement;
+        var jokeParagraph = jokeContainer.getElementsByTagName('p')[0];
+        var jokePunchline = jokeContainer.getElementsByClassName('punchline')[0];
+        jokeParagraph.contentEditable = true;
+        jokePunchline.contentEditable = true;
+        jokeContainer.getElementsByClassName('saveButton')[0].style.display = 'block'; // modified line
+    });
+}
+
+var saveButtons = document.getElementsByClassName('saveButton');
+for (var i = 0; i < saveButtons.length; i++) {
+    saveButtons[i].addEventListener('click', function() {
+        var jokeContainer = this.parentElement;
+        var jokeParagraph = jokeContainer.getElementsByTagName('p')[0];
+        var jokePunchline = jokeContainer.getElementsByClassName('punchline')[0];
+        jokeParagraph.contentEditable = false;
+        jokePunchline.contentEditable = false;
+        localStorage.setItem('joke' + i, JSON.stringify({
+            joke: jokeParagraph.innerText,
+            punchline: jokePunchline.innerText
+        }));
+        this.style.display = 'none';
+    });
+}
+
+// Load jokes from localStorage on page load
+window.onload = function() {
+    for (var i = 0; i < jokeContainers.length; i++) {
+        var savedJoke = JSON.parse(localStorage.getItem('joke' + i));
+        if (savedJoke) {
+            jokeContainers[i].getElementsByTagName('p')[0].innerText = savedJoke.joke;
+            jokeContainers[i].getElementsByClassName('punchline')[0].innerText = savedJoke.punchline;
+        }
+    }
+}
+</script>
+</body>
+</html>
